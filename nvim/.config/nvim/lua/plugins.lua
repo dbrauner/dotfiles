@@ -7,6 +7,24 @@ return require('packer').startup(function()
   -- Packer can manage itself
   use 'wbthomason/packer.nvim'
 
+  use 'neovim/nvim-lspconfig' -- Configurations for Nvim LSP
+  
+  use {
+      'RishabhRD/nvim-lsputils', -- lsputils
+      requires = { 'RishabhRD/popfix' }
+  }
+
+  use 'mfussenegger/nvim-jdtls'
+
+  use 'hrsh7th/nvim-cmp' -- Autocompletion plugin
+  use 'hrsh7th/cmp-nvim-lsp' -- LSP source for nvim-cmp
+  use 'hrsh7th/cmp-buffer'
+  use 'hrsh7th/cmp-path'
+  use 'hrsh7th/cmp-cmdline'
+
+  use 'saadparwaiz1/cmp_luasnip' -- Snippets source for nvim-cmp
+  use 'L3MON4D3/LuaSnip' -- Snippets plugin
+
   -- Because tpope is semi-god
   use 'tpope/vim-fugitive'
   use 'tpope/vim-commentary'
@@ -20,7 +38,12 @@ return require('packer').startup(function()
   	requires = { 'kyazdani42/nvim-web-devicons' }
   }
 
-  use 'vim-airline/vim-airline'
+  -- use 'vim-airline/vim-airline'
+  use {
+  'nvim-lualine/lualine.nvim',
+  requires = { 'kyazdani42/nvim-web-devicons', opt = true }
+}
+  use 'kdheepak/tabline.nvim'
 
   -- Lazy loading:
   -- Load on specific commands
@@ -49,20 +72,8 @@ return require('packer').startup(function()
   use_rocks 'penlight'
   use_rocks {'lua-resty-http', 'lpeg'}
 
-  -- Plugins can have post-install/update hooks
-  use {'iamcco/markdown-preview.nvim', run = 'cd app && yarn install', cmd = 'MarkdownPreview'}
-
   -- Post-install/update hook with neovim command
   use { 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate' }
-
-  -- Post-install/update hook with call of vimscript function with argument
-  use { 'glacambre/firenvim', run = function() vim.fn['firenvim#install'](0) end }
-
-  -- Use specific branch, dependency and run lua file after load
-  --use {
-    -- 'glepnir/galaxyline.nvim', branch = 'main', config = function() require'statusline' end,
-    -- requires = {'kyazdani42/nvim-web-devicons'}
-  -- }
 
   -- Use dependency and run lua function after load
   use {
@@ -72,15 +83,21 @@ return require('packer').startup(function()
 
   -- You can alias plugin names
   use {'dracula/vim', as = 'dracula'}
+  use { "catppuccin/nvim", as = "catppuccin" }
+
 
   -- colorschemes
   use {'sainnhe/everforest'}
   use {'nlknguyen/papercolor-theme'}
   use {'morhetz/gruvbox'}
+  use {'connorholyday/vim-snazzy'}
 
   -- tree
   use 'preservim/nerdtree'
 
   -- Brazil Config
-  use {'~/NinjaHooks/configuration/vim/amazon/brazil-config'}
+  use {'/apollo/env/envImprovement/vim/amazon/brazil-config'}
+
+  -- Diff
+  use 'will133/vim-dirdiff'
 end)
