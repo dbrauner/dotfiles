@@ -1,5 +1,4 @@
-
--- Navigation 
+-- Navigation
 vim.api.nvim_set_keymap('n', '<c-P>',
     "<cmd>lua require('fzf-lua').files()<CR>",
     { noremap = true, silent = true })
@@ -9,7 +8,7 @@ vim.api.nvim_set_keymap('n', '<c-G>',
 vim.api.nvim_set_keymap('n', '<c-B>',
     "<cmd>lua require('fzf-lua').buffers()<CR>",
     { noremap = true, silent = true })
-    
+
 -- split navigations
 vim.keymap.set('n', '<C-J>', '<C-W><C-J>')
 vim.keymap.set('n', '<C-K>', '<C-W><C-K>')
@@ -31,5 +30,8 @@ vim.keymap.set('n', '!', '!<c-g>u')
 vim.keymap.set('n', '?', '?<c-g>u')
 
 -- shortcuts to edit and reload neovim config
-vim.keymap.set('n', '<leader>ev', ':e $MYVIMRC<CR>', {silent=true} )
-vim.keymap.set('n', '<leader>sv', ':luafile $MYVIMRC<CR>', {silent=true} )
+vim.keymap.set('n', '<leader>ev', ':e $MYVIMRC<CR>', { silent = true })
+vim.keymap.set('n', '<leader>sv', ':luafile $MYVIMRC<CR>', { silent = true })
+
+-- Better copy
+vim.cmd([[autocmd TextYankPost * if v:event.operator is 'y' && v:event.regname is '' | execute 'OSCYankReg "' | endif]])

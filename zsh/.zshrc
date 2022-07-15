@@ -169,4 +169,8 @@ export NVM_DIR="$HOME/.nvm"
 export PATH="$PATH:$HOME/.rvm/bin"
 export PATH=$PATH:$HOME/.nvm/versions/node/v16.15.1/bin
 
+# GO
+export PATH=$PATH:/usr/local/go/bin:$HOME/go/bin
+
+
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
