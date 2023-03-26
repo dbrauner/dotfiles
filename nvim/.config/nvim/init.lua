@@ -48,3 +48,8 @@ vim.api.nvim_create_autocmd('InsertLeave', {
     pattern = '*',
     command = "if &readonly==0 && filereadable(bufname('%')) | silent update | endif"
 })
+
+vim.api.nvim_create_autocmd('TermOpen', {
+    pattern = '*',
+    command = 'setlocal nonumber norelativenumber'
+})

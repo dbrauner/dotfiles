@@ -35,3 +35,7 @@ vim.keymap.set('n', '<leader>sv', ':luafile $MYVIMRC<CR>', { silent = true })
 
 -- Better copy
 vim.cmd([[autocmd TextYankPost * if v:event.operator is 'y' && v:event.regname is '' | execute 'OSCYankReg "' | endif]])
+
+-- Press F5 to auto-insert current timestamp
+vim.keymap.set('n', '<F5>', '"=strftime("%T")<CR>', { silent = true })
+  -- 1 inoremap <silent> <F5> <C-R>=strftime("%T")<CR>

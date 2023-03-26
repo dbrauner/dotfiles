@@ -15,4 +15,5 @@ vim.opt.showmode=false -- we're using airline for the mode
 vim.opt.termguicolors=true -- should get a better range of colors (disable if anything is looking weird)
 vim.opt.mouse='a'
 vim.opt.completeopt = {'menu', 'menuone', 'noselect'}
+vim.opt.shell='zsh' 
 
