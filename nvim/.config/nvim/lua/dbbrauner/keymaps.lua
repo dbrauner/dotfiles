@@ -25,7 +25,6 @@ vim.keymap.set('n', 'J', 'mzJ`z')
 
 -- Create some undo breakpoints
 vim.keymap.set('n', ',', ',<c-g>u')
-vim.keymap.set('n', '.', '.<c-g>u')
 vim.keymap.set('n', '!', '!<c-g>u')
 vim.keymap.set('n', '?', '?<c-g>u')
 
@@ -34,8 +33,9 @@ vim.keymap.set('n', '<leader>ev', ':e $MYVIMRC<CR>', { silent = true })
 vim.keymap.set('n', '<leader>sv', ':luafile $MYVIMRC<CR>', { silent = true })
 
 -- Better copy
-vim.cmd([[autocmd TextYankPost * if v:event.operator is 'y' && v:event.regname is '' | execute 'OSCYankReg "' | endif]])
+vim.cmd(
+[[autocmd TextYankPost * if v:event.operator is 'y' && v:event.regname is '' | execute 'OSCYankRegister "' | endif]])
 
 -- Press F5 to auto-insert current timestamp
 vim.keymap.set('n', '<F5>', '"=strftime("%T")<CR>', { silent = true })
-  -- 1 inoremap <silent> <F5> <C-R>=strftime("%T")<CR>
+-- 1 inoremap <silent> <F5> <C-R>=strftime("%T")<CR>

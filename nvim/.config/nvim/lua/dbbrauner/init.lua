@@ -1,0 +1,8 @@
+require('dbbrauner.keymaps')
+require('dbbrauner.barium')
+require('dbbrauner.lspsetup')
+require('dbbrauner.syntax')
+require('dbbrauner.utils')
+require('dbbrauner.options')
+require('dbbrauner.dashboard')
+require('dbbrauner.autocommands')

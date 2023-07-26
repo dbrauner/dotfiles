@@ -1,9 +1,21 @@
 -- This file can be loaded by calling `lua require('plugins')` from your init.vim
+-- vim.fn.setenv("MACOSX_DEPLOYMENT_TARGET", "10.15")
+
 
 -- Only required if you have packer configured as `opt`
 vim.cmd [[packadd packer.nvim]]
 
-return require('packer').startup(function()
+local packer = require('packer')
+local util = require 'packer.util'
+
+packer.init({
+    package_root = util.join_paths(vim.fn.stdpath('data'), 'site', 'pack'),
+    luarocks = {
+        python_cmd = 'python3'
+    }
+})
+
+return packer.startup(function(use, use_rocks)
     -- Packer can manage itself
     use 'wbthomason/packer.nvim'
 
@@ -16,14 +28,14 @@ return require('packer').startup(function()
 
     use 'mfussenegger/nvim-jdtls'
 
-    use 'hrsh7th/nvim-cmp' -- Autocompletion plugin
+    use 'hrsh7th/nvim-cmp'     -- Autocompletion plugin
     use 'hrsh7th/cmp-nvim-lsp' -- LSP source for nvim-cmp
     use 'hrsh7th/cmp-buffer'
     use 'hrsh7th/cmp-path'
     use 'hrsh7th/cmp-cmdline'
 
     use 'saadparwaiz1/cmp_luasnip' -- Snippets source for nvim-cmp
-    use 'L3MON4D3/LuaSnip' -- Snippets plugin
+    use 'L3MON4D3/LuaSnip'         -- Snippets plugin
 
     -- Because tpope is semi-god
     use 'tpope/vim-fugitive'
@@ -95,12 +107,12 @@ return require('packer').startup(function()
     -- tree
     use { 'preservim/nerdtree',
         requires = { 'Xuyuanp/nerdtree-git-plugin',
-            'tiagofumo/vim-nerdtree-syntax-highlight',
+            'johnstef99/vim-nerdtree-syntax-highlight',
             'ryanoasis/vim-devicons' }
     }
 
     -- Brazil Config
-    use { '/apollo/env/envImprovement/vim/amazon/brazil-config' }
+    -- use { '/apollo/env/envImprovement/vim/amazon/brazil-config' }
 
     -- Diff
     use 'will133/vim-dirdiff'
@@ -111,4 +123,49 @@ return require('packer').startup(function()
     }
 
     use { 'ojroques/vim-oscyank', branch = 'main' }
+
+    use({
+        "jackMort/ChatGPT.nvim",
+        config = function()
+            require("chatgpt").setup()
+        end,
+        requires = {
+            "MunifTanjim/nui.nvim",
+            "nvim-lua/plenary.nvim",
+            "nvim-telescope/telescope.nvim"
+        }
+    })
+
+    use {
+        'VonHeikemen/lsp-zero.nvim',
+        branch = 'v2.x',
+        requires = {
+            -- LSP Support
+            { 'neovim/nvim-lspconfig' },
+            {
+                'williamboman/mason.nvim',
+                run = function() pcall(vim.cmd, 'MasonUpdate') end
+            },
+            { 'williamboman/mason-lspconfig.nvim' },
+
+            -- Autocompletion
+            { 'hrsh7th/nvim-cmp' },
+            { 'hrsh7th/cmp-buffer' },
+            { 'hrsh7th/cmp-path' },
+            { 'saadparwaiz1/cmp_luasnip' },
+            { 'hrsh7th/cmp-nvim-lsp' },
+            { 'hrsh7th/cmp-nvim-lua' },
+
+            -- Snippets
+            { 'L3MON4D3/LuaSnip' },
+            { 'rafamadriz/friendly-snippets' },
+        }
+    }
+
+    -- use({
+    --     "aserowy/tmux.nvim",
+    --     config = function() return require("tmux").setup() end
+    -- })
+    use { 'christoomey/vim-tmux-navigator' }
+    use { 'xiyaowong/transparent.nvim' }
 end)

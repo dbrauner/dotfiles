@@ -1,16 +1,16 @@
-require('barium')
+require('dbbrauner.barium')
 
 local lspconfig = require 'lspconfig'
 
 -- language servers to enable
-local servers = { 'barium', 'solargraph', 'pyright', 'tsserver', 'sumneko_lua' }
+local servers = { 'lua_ls', 'gopls', 'barium', 'solargraph', 'pyright', 'tsserver' }
 -- Mappings.
 -- See `:help vim.diagnostic.*` for documentation on any of the below functions
 local opts = { noremap = true, silent = true }
-vim.keymap.set('n', '<space>e', vim.diagnostic.open_float, opts)
+vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, opts)
 vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, opts)
 vim.keymap.set('n', ']d', vim.diagnostic.goto_next, opts)
-vim.keymap.set('n', '<space>q', vim.diagnostic.setloclist, opts)
+vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, opts)
 
 -- Use an on_attach function to only map the following keys
 -- after the language server attaches to the current buffer
@@ -27,16 +27,16 @@ local on_attach = function(client, bufnr)
     vim.keymap.set('n', 'K', vim.lsp.buf.hover, bufopts)
     vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, bufopts)
     vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, bufopts)
-    vim.keymap.set('n', '<space>wa', vim.lsp.buf.add_workspace_folder, bufopts)
-    vim.keymap.set('n', '<space>wr', vim.lsp.buf.remove_workspace_folder, bufopts)
-    vim.keymap.set('n', '<space>wl', function()
+    vim.keymap.set('n', '<leader>wa', vim.lsp.buf.add_workspace_folder, bufopts)
+    vim.keymap.set('n', '<leader>wr', vim.lsp.buf.remove_workspace_folder, bufopts)
+    vim.keymap.set('n', '<leader>wl', function()
         print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
     end, bufopts)
-    vim.keymap.set('n', '<space>D', vim.lsp.buf.type_definition, bufopts)
-    vim.keymap.set('n', '<space>rn', vim.lsp.buf.rename, bufopts)
+    vim.keymap.set('n', '<leader>D', vim.lsp.buf.type_definition, bufopts)
+    vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, bufopts)
     vim.keymap.set('n', 'ga', vim.lsp.buf.code_action, bufopts)
     vim.keymap.set('n', 'gr', vim.lsp.buf.references, bufopts)
-    vim.keymap.set('n', '<space>f', vim.lsp.buf.formatting, bufopts)
+    vim.keymap.set('n', '<leader>f', function() vim.lsp.buf.format({ async = true }) end, bufopts)
 end
 
 local lsp_flags = {
@@ -44,13 +44,16 @@ local lsp_flags = {
     debounce_text_changes = 150,
 }
 
--- Add additional capabilities supported by nvim-cmp
-local capabilities = vim.lsp.protocol.make_client_capabilities()
--- add snippetSupport
-capabilities.textDocument.completion.completionItem.snippetSupport = true
+-- -- Add additional capabilities supported by nvim-cmp
+-- local capabilities = vim.lsp.protocol.make_client_capabilities()
+-- -- add snippetSupport
+-- capabilities.textDocument.completion.completionItem.snippetSupport = true
 
-capabilities = require('cmp_nvim_lsp').update_capabilities(capabilities)
+-- capabilities = require('cmp_nvim_lsp').default_capabitilities()
+-- -- capabilities = require('cmp_nvim_lsp').update_capabilities(capabilities)
 
+-- The nvim-cmp almost supports LSP's capabilities so You should advertise it to LSP servers..
+local capabilities = require('cmp_nvim_lsp').default_capabilities()
 
 for _, lsp in ipairs(servers) do
     lspconfig[lsp].setup {
@@ -106,7 +109,7 @@ cmp.setup {
     },
 }
 
-jdtls_setup = function()
+Jdtls_setup = function()
     local root_dir = require('jdtls.setup').find_root({ 'packageInfo' }, 'Config')
     local home = os.getenv('HOME')
     local eclipse_workspace = home .. "/.local/share/eclipse/" .. vim.fn.fnamemodify(root_dir, ':p:h:t')
@@ -180,7 +183,7 @@ local augroup = vim.api.nvim_create_augroup('lsp', { clear = true })
 vim.api.nvim_create_autocmd('FileType', {
     pattern = 'java',
     group = augroup,
-    command = 'luado jdtls_setup()'
+    command = 'luado Jdtls_setup()'
 })
 
 -- lsputils plugin
@@ -194,28 +197,6 @@ vim.lsp.handlers['textDocument/documentSymbol'] = require 'lsputil.symbols'.docu
 vim.lsp.handlers['workspace/symbol'] = require 'lsputil.symbols'.workspace_handler
 
 
-lspconfig.sumneko_lua.setup {
-    settings = {
-        Lua = {
-            runtime = {
-                -- Tell the language server which version of Lua you're using (most likely LuaJIT in the case of Neovim)
-                version = 'LuaJIT',
-            },
-            diagnostics = {
-                -- Get the language server to recognize the `vim` global
-                globals = { 'vim', 'use' },
-            },
-            workspace = {
-                -- Make the server aware of Neovim runtime files
-                library = vim.api.nvim_get_runtime_file("", true),
-            },
-            -- Do not send telemetry data containing a randomized but unique identifier
-            telemetry = {
-                enable = false,
-            },
-        },
-    },
-}
 
 local util = require "lspconfig/util"
 -- Add additional capabilities supported by nvim-cmp
@@ -243,6 +224,10 @@ lspconfig.gopls.setup {
     },
 }
 
+lspconfig.pyright.setup {
+    vim.keymap.set("n", "<leader>or", '<cmd>PyrightOrganizeImports<cr>', { silent = true, buffer = true })
+}
+
 function OrgImports(wait_ms)
     local params = vim.lsp.util.make_range_params()
     params.context = { only = { "source.organizeImports" } }
@@ -258,8 +243,20 @@ function OrgImports(wait_ms)
     end
 end
 
-vim.cmd [[ 
+vim.cmd [[
 autocmd BufWritePre *.go lua OrgImports(1000)
 ]]
 
 vim.lsp.set_log_level("debug")
+
+
+local lsp = require('lsp-zero').preset({})
+
+lsp.on_attach(function(client, bufnr)
+    lsp.default_keymaps({ buffer = bufnr })
+end)
+
+-- (Optional) Configure lua language server for neovim
+require('lspconfig').lua_ls.setup(lsp.nvim_lua_ls())
+
+lsp.setup()
